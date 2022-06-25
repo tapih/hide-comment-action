@@ -1,14 +1,6 @@
 name: ts
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - src/**
-      - tests/**
-      - '*.json'
-      - action.yaml
-      - .github/workflows/ts.yaml
   pull_request:
     branches: [main]
     paths:
@@ -86,6 +78,7 @@ jobs:
           state: open
 
       - name: e2e-test ${{ steps.find-pr.outputs.pr }}
+        if: github.event_name != 'push'
         uses: ./
         with:
           pull-request-number: ${{ steps.find-pr.outputs.pr }}
@@ -96,7 +89,7 @@ jobs:
 
   generate:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
         with:
