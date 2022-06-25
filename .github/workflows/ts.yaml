@@ -84,6 +84,11 @@ jobs:
           pull-request-number: ${{ steps.find-pr.outputs.pr }}
           ends-with: |
             <!-- tail -->
+
+      - name: e2e-test ${{ steps.find-pr.outputs.pr }}
+        uses: ./
+        with:
+          pull-request-number: ${{ steps.find-pr.outputs.pr }}
           starts-with: |
             <!-- head -->
 

@@ -48,17 +48,17 @@ export const toMinimize = (c: Comment, inputs: Inputs): boolean => {
   if (c.isMinimized) {
     return false
   }
-  if (inputs.authors.some((a) => c.author?.login === a)) {
-    core.info(`authors filter matched: ${JSON.stringify(c.url)}`)
-    return true
+  if (inputs.authors.length > 0 && !inputs.authors.some((a) => c.author?.login === a)) {
+    core.info(`authors filter did not match: ${JSON.stringify(c.url)}`)
+    return false
   }
-  if (inputs.startsWith.some((s) => c.body.trimStart().startsWith(s))) {
-    core.info(`starts-with matched: ${JSON.stringify(c.url)}`)
-    return true
+  if (inputs.startsWith.length > 0 && !inputs.startsWith.some((s) => c.body.trimStart().startsWith(s))) {
+    core.info(`starts-with did not match: ${JSON.stringify(c.url)}`)
+    return false
   }
-  if (inputs.endsWith.some((s) => c.body.trimEnd().endsWith(s))) {
-    core.info(`ends-with matched: ${JSON.stringify(c.url)}`)
-    return true
+  if (inputs.endsWith.length > 0 && !inputs.endsWith.some((s) => c.body.trimEnd().endsWith(s))) {
+    core.info(`ends-with did not match: ${JSON.stringify(c.url)}`)
+    return false
   }
-  return false
+  return true
 }
