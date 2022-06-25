@@ -72,7 +72,9 @@ jobs:
           case "${{ github.event_name }}" in
             issue_comment )     branch=${{ steps.comment-branch.outputs.head_ref }} ;;
             workflow_dispatch ) branch=${GITHUB_REF#refs/heads/} ;;
-            * )                 branch=${{ github.head_ref }} ;;
+            pull_request )      branch=${{ github.head_ref }} ;;
+            push )              branch=${{ github.ref_name }} ;;
+            * )                 exit 1 ;;
           esac
           echo "::set-output name=branch::${branch}"
 
