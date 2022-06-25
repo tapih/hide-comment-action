@@ -10,6 +10,7 @@ type Inputs = {
   startsWith: string[]
   endsWith: string[]
   token: string
+  pullRequestNumber: number | null
 }
 
 export const run = async (inputs: Inputs): Promise<void> => {
@@ -23,7 +24,7 @@ export const run = async (inputs: Inputs): Promise<void> => {
   const comments = await queryComments(octokit, {
     owner: github.context.repo.owner,
     name: github.context.repo.repo,
-    number: github.context.payload.pull_request.number,
+    number: inputs.pullRequestNumber === null ? github.context.payload.pull_request.number : inputs.pullRequestNumber,
   })
 
   const filteredComments = filterComments(comments, inputs)

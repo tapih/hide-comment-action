@@ -15,6 +15,9 @@ inputs:
     description: GitHub token to post a comment
     required: true
     default: ${{ github.token }}
+  pull-request-number:
+    description: pull request number
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

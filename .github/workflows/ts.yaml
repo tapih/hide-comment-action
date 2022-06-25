@@ -17,6 +17,9 @@ on:
       - '*.json'
       - action.yaml
       - .github/workflows/ts.yaml
+  workflow_dispatch:
+  issue_comment:
+    types: [created]
 
 jobs:
   test:
@@ -54,9 +57,36 @@ jobs:
               repo: context.repo.repo,
               body: `<!-- head -->\n👋 e2e-test`
             })
+
+      - name: Get branch name on comment
+        uses: xt0rted/pull-request-comment-branch@29fe0354c01b30fb3de76f193ab33abf8fe5ddb0 #1.2.0
+        id: comment-branch
+        if: github.event_name == 'issue_comment'
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get branch name
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "issue_comment" ]
+          then
+            branch=${{ steps.comment-branch.outputs.head_ref }}
+          else
+            branch=${GITHUB_REF#refs/heads/}
+          fi
+          echo "::set-output name=branch::${branch}"
+
+      - name: Get PR Number
+        id: find-pr
+        uses: jwalton/gh-find-current-pr@e12d66bc9ecc4fdcde07b0f70a3cb68ce7e4d807 # v1.3.0
+        with:
+          sha: ${{ steps.vars.outputs.branch }}
+          state: open
+
       - name: e2e-test
         uses: ./
         with:
+          issue-number: ${{ steps.find-pr.outputs.pr }}
           ends-with: |
             <!-- tail -->
           starts-with: |
