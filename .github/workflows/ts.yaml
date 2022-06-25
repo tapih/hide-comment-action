@@ -47,6 +47,7 @@ jobs:
               repo: context.repo.repo,
               body: `👋 e2e-test\n<!-- tail -->`
             })
+
       - if: github.event_name == 'pull_request'
         uses: actions/github-script@v6
         with:
@@ -66,24 +67,23 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get branch name
-        id: vars
+        id: branch
         run: |
-          if [ "${{ github.event_name }}" = "issue_comment" ]
-          then
-            branch=${{ steps.comment-branch.outputs.head_ref }}
-          else
-            branch=${GITHUB_REF#refs/heads/}
-          fi
+          case "${{ github.event_name }}" in
+            issue_comment )     branch=${{ steps.comment-branch.outputs.head_ref }} ;;
+            workflow_dispatch ) branch=${GITHUB_REF#refs/heads/} ;;
+            * )                 branch=${{ github.head_ref }} ;;
+          esac
           echo "::set-output name=branch::${branch}"
 
-      - name: Get PR Number
+      - name: Get PR Number ${{ steps.branch.outputs.branch }}
         id: find-pr
         uses: jwalton/gh-find-current-pr@e12d66bc9ecc4fdcde07b0f70a3cb68ce7e4d807 # v1.3.0
         with:
-          sha: ${{ steps.vars.outputs.branch }}
+          sha: ${{ steps.branch.outputs.branch }}
           state: open
 
-      - name: e2e-test
+      - name: e2e-test ${{ steps.find-pr.outputs.pr }}
         uses: ./
         with:
           pull-request-number: ${{ steps.find-pr.outputs.pr }}
