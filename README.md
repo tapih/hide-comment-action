@@ -69,3 +69,4 @@ It ignores other events.
 | `ends-with` | - | Multi-line string of ends-with condition
 | `authors` | `github-actions` | Multi-line string of author condition
 | `token` | `${{ github.token }}` | GitHub token to post a comment
+| `pull-request-number` | - | Pull Request number
