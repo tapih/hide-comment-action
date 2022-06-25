@@ -18,7 +18,7 @@ describe('filter to minimize', () => {
           pullRequestNumber: 123,
         }
       )
-    ).toBeFalsy()
+    ).toBeTruthy()
   })
 
   test('already minimized', () => {
