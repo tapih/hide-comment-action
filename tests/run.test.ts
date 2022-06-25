@@ -15,6 +15,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: [],
           token: `token`,
+          pullRequestNumber: null,
         }
       )
     ).toBeFalsy()
@@ -35,6 +36,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: [],
           token: `token`,
+          pullRequestNumber: null,
         }
       )
     ).toBeFalsy()
@@ -55,6 +57,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: [],
           token: `token`,
+          pullRequestNumber: null,
         }
       )
     ).toBeTruthy()
@@ -74,6 +77,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: [],
           token: `token`,
+          pullRequestNumber: null,
         }
       )
     ).toBeFalsy()
@@ -93,6 +97,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: ['<!-- head -->'],
           token: `token`,
+          pullRequestNumber: null,
         }
       )
     ).toBeTruthy()
@@ -111,6 +116,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: ['<!-- head -->'],
           token: `token`,
+          pullRequestNumber: null,
         }
       )
     ).toBeFalsy()
@@ -130,6 +136,7 @@ describe('filter to minimize', () => {
           endsWith: ['<!-- tail -->'],
           startsWith: [],
           token: `token`,
+          pullRequestNumber: null,
         }
       )
     ).toBeTruthy()
@@ -148,6 +155,7 @@ describe('filter to minimize', () => {
           endsWith: ['<!-- tail -->'],
           startsWith: [],
           token: `token`,
+          pullRequestNumber: null,
         }
       )
     ).toBeFalsy()
