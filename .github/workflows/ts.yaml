@@ -86,7 +86,7 @@ jobs:
       - name: e2e-test
         uses: ./
         with:
-          issue-number: ${{ steps.find-pr.outputs.pr }}
+          pull-request-number: ${{ steps.find-pr.outputs.pr }}
           ends-with: |
             <!-- tail -->
           starts-with: |
