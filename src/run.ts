@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { CommentsQuery } from './generated/graphql'
-import { IssueComment, PullRequest } from './generated/graphql-types'
+import { IssueComment } from './generated/graphql-types'
 import { queryComments } from './queries/comments'
 import { minimizeComment } from './queries/minimize'
 
@@ -10,7 +10,7 @@ type Inputs = {
   startsWith: string[]
   endsWith: string[]
   token: string
-  pullRequestNumber: number | null
+  pullRequestNumber: number | undefined
 }
 
 export const run = async (inputs: Inputs): Promise<void> => {
@@ -31,15 +31,15 @@ export const run = async (inputs: Inputs): Promise<void> => {
   }
 }
 
-const tryGetPullRequestNumber = (pullRequestNumber: number | null): number => {
-  if (github.context.payload.pull_request === null) {
-    if (pullRequestNumber === null) {
-      throw new Error(`pull-request-number should be specified`)
-    }
+const tryGetPullRequestNumber = (pullRequestNumber: number | undefined): number => {
+  // always use predefined value on pull request trigger
+  if (github.context.payload.pull_request) {
+    return github.context.payload.pull_request.number
+  }
+  if (pullRequestNumber) {
     return pullRequestNumber
   }
-  // always use predefined value on pull request trigger
-  return github.context.payload.pull_request.number
+  throw new Error(`pull-request-number should be specified`)
 }
 
 type Comment = Pick<IssueComment, 'id' | 'url' | 'isMinimized' | 'author' | 'body'>
