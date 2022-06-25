@@ -16,8 +16,8 @@ inputs:
     required: true
     default: ${{ github.token }}
   pull-request-number:
-    description: pull request number (ignored on pull request event)
-    required: false
+    description: pull request number
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'

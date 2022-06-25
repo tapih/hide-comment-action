@@ -10,18 +10,20 @@ type Inputs = {
   startsWith: string[]
   endsWith: string[]
   token: string
-  pullRequestNumber: number | undefined
+  pullRequestNumber: number
 }
 
 export const run = async (inputs: Inputs): Promise<void> => {
-  const pullRequestNumber = tryGetPullRequestNumber(inputs.pullRequestNumber)
+  if (Number.isNaN(inputs.pullRequestNumber)) {
+    throw new Error('pull request number is invalid and converted to NaN')
+  }
   const octokit = github.getOctokit(inputs.token)
 
-  core.info(`query comments in pull request ${pullRequestNumber}`)
+  core.info(`query comments in pull request ${inputs.pullRequestNumber}`)
   const comments = await queryComments(octokit, {
     owner: github.context.repo.owner,
     name: github.context.repo.repo,
-    number: pullRequestNumber,
+    number: inputs.pullRequestNumber,
   })
 
   const filteredComments = filterComments(comments, inputs)
@@ -29,20 +31,6 @@ export const run = async (inputs: Inputs): Promise<void> => {
     core.info(`minimize comment ${JSON.stringify(c.url)}`)
     await minimizeComment(octokit, { id: c.id })
   }
-}
-
-const tryGetPullRequestNumber = (pullRequestNumber: number | undefined): number => {
-  // always use predefined value on pull request trigger
-  if (github.context.payload.pull_request) {
-    if (pullRequestNumber) {
-      core.warning(`pull-request-number ${pullRequestNumber} is ignored on pull request event`)
-    }
-    return github.context.payload.pull_request.number
-  }
-  if (pullRequestNumber) {
-    return pullRequestNumber
-  }
-  throw new Error('pull-request-number is missing')
 }
 
 type Comment = Pick<IssueComment, 'id' | 'url' | 'isMinimized' | 'author' | 'body'>
