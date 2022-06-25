@@ -7,7 +7,7 @@ const main = async (): Promise<void> => {
     startsWith: core.getMultilineInput('starts-with'),
     endsWith: core.getMultilineInput('ends-with'),
     token: core.getInput('token', { required: true }),
-    pullRequestNumber: parseInt(core.getInput('pull-request-number')) || undefined,
+    pullRequestNumber: parseInt(core.getInput('pull-request-number', { required: true })),
   })
 }
 
