@@ -34,12 +34,15 @@ export const run = async (inputs: Inputs): Promise<void> => {
 const tryGetPullRequestNumber = (pullRequestNumber: number | undefined): number => {
   // always use predefined value on pull request trigger
   if (github.context.payload.pull_request) {
+    if (pullRequestNumber) {
+      core.warning(`pull-request-number ${pullRequestNumber} is ignored on pull request event`)
+    }
     return github.context.payload.pull_request.number
   }
   if (pullRequestNumber) {
     return pullRequestNumber
   }
-  throw new Error(`pull-request-number should be specified`)
+  throw new Error('pull-request-number is missing')
 }
 
 type Comment = Pick<IssueComment, 'id' | 'url' | 'isMinimized' | 'author' | 'body'>

@@ -16,7 +16,7 @@ inputs:
     required: true
     default: ${{ github.token }}
   pull-request-number:
-    description: pull request number
+    description: pull request number (ignored on pull request event)
     required: false
 runs:
   using: 'node16'
