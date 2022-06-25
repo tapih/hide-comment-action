@@ -10,21 +10,18 @@ type Inputs = {
   startsWith: string[]
   endsWith: string[]
   token: string
-  pullRequestNumber: number | null
+  pullRequestNumber: number | undefined
 }
 
 export const run = async (inputs: Inputs): Promise<void> => {
-  if (github.context.payload.pull_request === undefined) {
-    core.info(`non pull_request event: ${github.context.eventName}`)
-    return
-  }
+  const pullRequestNumber = tryGetPullRequestNumber(inputs.pullRequestNumber)
   const octokit = github.getOctokit(inputs.token)
 
-  core.info(`query comments in pull request ${github.context.payload.pull_request.html_url ?? '?'}`)
+  core.info(`query comments in pull request ${pullRequestNumber}`)
   const comments = await queryComments(octokit, {
     owner: github.context.repo.owner,
     name: github.context.repo.repo,
-    number: inputs.pullRequestNumber === null ? github.context.payload.pull_request.number : inputs.pullRequestNumber,
+    number: pullRequestNumber,
   })
 
   const filteredComments = filterComments(comments, inputs)
@@ -32,6 +29,17 @@ export const run = async (inputs: Inputs): Promise<void> => {
     core.info(`minimize comment ${JSON.stringify(c.url)}`)
     await minimizeComment(octokit, { id: c.id })
   }
+}
+
+const tryGetPullRequestNumber = (pullRequestNumber: number | undefined): number => {
+  // always use predefined value on pull request trigger
+  if (github.context.payload.pull_request) {
+    return github.context.payload.pull_request.number
+  }
+  if (pullRequestNumber) {
+    return pullRequestNumber
+  }
+  throw new Error(`pull-request-number should be specified`)
 }
 
 type Comment = Pick<IssueComment, 'id' | 'url' | 'isMinimized' | 'author' | 'body'>

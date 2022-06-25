@@ -15,7 +15,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: [],
           token: `token`,
-          pullRequestNumber: null,
+          pullRequestNumber: undefined,
         }
       )
     ).toBeFalsy()
@@ -36,7 +36,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: [],
           token: `token`,
-          pullRequestNumber: null,
+          pullRequestNumber: undefined,
         }
       )
     ).toBeFalsy()
@@ -57,7 +57,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: [],
           token: `token`,
-          pullRequestNumber: null,
+          pullRequestNumber: undefined,
         }
       )
     ).toBeTruthy()
@@ -77,7 +77,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: [],
           token: `token`,
-          pullRequestNumber: null,
+          pullRequestNumber: undefined,
         }
       )
     ).toBeFalsy()
@@ -97,7 +97,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: ['<!-- head -->'],
           token: `token`,
-          pullRequestNumber: null,
+          pullRequestNumber: undefined,
         }
       )
     ).toBeTruthy()
@@ -116,7 +116,7 @@ describe('filter to minimize', () => {
           endsWith: [],
           startsWith: ['<!-- head -->'],
           token: `token`,
-          pullRequestNumber: null,
+          pullRequestNumber: undefined,
         }
       )
     ).toBeFalsy()
@@ -136,7 +136,7 @@ describe('filter to minimize', () => {
           endsWith: ['<!-- tail -->'],
           startsWith: [],
           token: `token`,
-          pullRequestNumber: null,
+          pullRequestNumber: undefined,
         }
       )
     ).toBeTruthy()
@@ -155,7 +155,7 @@ describe('filter to minimize', () => {
           endsWith: ['<!-- tail -->'],
           startsWith: [],
           token: `token`,
-          pullRequestNumber: null,
+          pullRequestNumber: undefined,
         }
       )
     ).toBeFalsy()
